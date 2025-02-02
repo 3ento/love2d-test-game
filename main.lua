@@ -106,19 +106,16 @@ function love.update(dt)
     end
 
     player.collider:setLinearVelocity(vx, vy)
-
     player.animations.current:update(dt)
-
-    
 
     -- camera
     cam:lookAt(player.x, player.y)
     cam:zoomTo(2)
 
-    if player.x < 150 then
-        cam:lockX(200, cam.smooth.linear(25))
+    if cam.x < 0 then
+        cam:lockX(0)
     end
-    
+
     -- colliders
     world:update(dt)
     player.x = player.collider:getX() - 32
@@ -129,11 +126,20 @@ end
 function love.draw() 
     cam:attach()
         gameMap:drawLayer(gameMap.layers["ground"])
+        gameMap:drawLayer(gameMap.layers["behind-the-wall"])
+        gameMap:drawLayer(gameMap.layers["Tile Layer 4"])
         gameMap:drawLayer(gameMap.layers["deco"])
+        gameMap:drawLayer(gameMap.layers["Tile Layer 3"])
+        gameMap:drawLayer(gameMap.layers["stairs-to-level-2"])
+        gameMap:drawLayer(gameMap.layers["level-2"])
         player.animations.current:draw(player.spriteSheet, player.x, player.y, nil, 2)
+        gameMap:drawLayer(gameMap.layers["nature"])
+        love.graphics.circle("line", 0, 0, 1)
+        love.graphics.circle("fill", 1600, 1600, 1)
+
         world:draw()
     cam:detach()
 
-    --love.graphics.print(player.x, 0, 0)
-    --love.graphics.print(player.y, 0, 10)
+    love.graphics.circle("fill", cam.x, cam.y, 1)
+    love.graphics.print(player.x, 0, 0)
 end
