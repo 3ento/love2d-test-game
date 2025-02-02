@@ -63,6 +63,7 @@ function love.load()
     
 
     love.window.setFullscreen(true)
+    f3Menu = false
 end
 
 function love.update(dt)
@@ -85,24 +86,25 @@ function love.update(dt)
     end
 
     -- --cardinal
-    if love.keyboard.isDown('right') then
+    if love.keyboard.isDown('right') or love.keyboard.isDown("d") then
         vx = player.speed
         player.animations.current = player.animations.right
         player.animations.last = player.animations.right
 
-    elseif love.keyboard.isDown('left') then 
+    elseif love.keyboard.isDown('left') or love.keyboard.isDown("a") then 
         if player.x > -15 then 
             vx = player.speed * -1
         end
         player.animations.current = player.animations.left
         player.animations.last = player.animations.left
+    end
 
-    elseif love.keyboard.isDown('down') then 
+    if love.keyboard.isDown('down') or love.keyboard.isDown("s") then 
         vy = player.speed
         player.animations.current = player.animations.down
         player.animations.last = player.animations.down
 
-    elseif love.keyboard.isDown('up') then 
+    elseif love.keyboard.isDown('up') or love.keyboard.isDown("w") then 
         if player.y > -30 then 
             vy = player.speed * -1
         end 
@@ -120,30 +122,24 @@ function love.update(dt)
     cam:lookAt(player.x, player.y)
     cam:zoomTo(cam_zoom)
 
-    -- This section prevents the camera from viewing outside the background
-    -- First, get width/height of the game window
+    -- prevent camera from going out of bounds
     local w = love.graphics.getWidth()
     local h = love.graphics.getHeight()
 
-    -- Left border
     if cam.x < w/(2*cam_zoom) then
         cam.x = w/(2*cam_zoom)
     end
 
-    -- Right border
     if cam.y < h/(2*cam_zoom) then
         cam.y = h/(2*cam_zoom)
     end
 
-    -- Get width/height of background
     local mapW = gameMap.width * gameMap.tilewidth
     local mapH = gameMap.height * gameMap.tileheight
 
-    -- Right border
     if cam.x > (mapW - w/(2*cam_zoom)) then
         cam.x = (mapW - w/(2*cam_zoom))
     end
-    -- Bottom border
     if cam.y > (mapH - h/(2*cam_zoom)) then
         cam.y = (mapH - h/(2*cam_zoom))
     end
@@ -153,10 +149,15 @@ function love.update(dt)
     player.x = player.collider:getX() - 32
     player.y = player.collider:getY() - 35
    
+
+    if love.keyboard.isDown("f3") then
+        f3Menu = true
+    end
 end
 
 function love.draw() 
     cam:attach()
+        -- order of map rendering
         gameMap:drawLayer(gameMap.layers["ground"])
         gameMap:drawLayer(gameMap.layers["behind-the-wall"])
         gameMap:drawLayer(gameMap.layers["Tile Layer 4"])
@@ -165,17 +166,21 @@ function love.draw()
         gameMap:drawLayer(gameMap.layers["stairs-to-level-2"])
         gameMap:drawLayer(gameMap.layers["level-2"])
         gameMap:drawLayer(gameMap.layers["deco-level-2"])
+        -- player render
         player.animations.current:draw(player.spriteSheet, player.x, player.y, nil, 2)
         gameMap:drawLayer(gameMap.layers["nature"])
-        love.graphics.circle("line", 0, 0, 1)
-        love.graphics.circle("fill", 1600, 1600, 1)
 
+        -- render the racoon NPC
         rac.current:draw(rac.spriteSheet, rac.x, rac.y, nil, 2)
 
+        -- show hitboxes
         --world:draw()
+
     cam:detach()
 
-    love.graphics.circle("fill", cam.x, cam.y, 1)
-    love.graphics.print(player.x, 0, 0)
-    love.graphics.print(player.y, 0, 10)
+    if f3Menu then
+        love.graphics.print(math.floor(player.x), 0,0)
+        love.graphics.print(math.floor(player.y), 0,10)
+    end
+
 end
