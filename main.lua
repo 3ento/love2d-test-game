@@ -52,6 +52,8 @@ function love.load()
             table.insert(walls, wall)
         end
     end
+
+    love.window.setFullscreen(true)
 end
 
 function love.update(dt)
