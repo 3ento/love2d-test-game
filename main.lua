@@ -17,6 +17,14 @@ function love.load()
     wf = require 'lib/windfield'
     world = wf.newWorld(0,0)
 
+    --racoon
+    rac = {}
+    rac.x = 720
+    rac.y = 35
+    rac.spriteSheet = love.graphics.newImage('rsc/sprites/RACCOONSPRITESHEET.png')
+    rac.grid = anim8.newGrid(32, 32, rac.spriteSheet:getWidth(),  rac.spriteSheet:getHeight())
+    rac.current = anim8.newAnimation(rac.grid('1-4', 1), 0.7)
+
     -- player
     player = {}
     player.speed = 250
@@ -52,6 +60,7 @@ function love.load()
             table.insert(walls, wall)
         end
     end
+    
 
     love.window.setFullscreen(true)
 end
@@ -76,7 +85,7 @@ function love.update(dt)
     end
 
     -- --cardinal
-    if love.keyboard.isDown('right') then 
+    if love.keyboard.isDown('right') then
         vx = player.speed
         player.animations.current = player.animations.right
         player.animations.last = player.animations.right
@@ -84,7 +93,6 @@ function love.update(dt)
     elseif love.keyboard.isDown('left') then 
         if player.x > -15 then 
             vx = player.speed * -1
-            --player.x = player.x - 2 
         end
         player.animations.current = player.animations.left
         player.animations.last = player.animations.left
@@ -95,11 +103,9 @@ function love.update(dt)
         player.animations.last = player.animations.down
 
     elseif love.keyboard.isDown('up') then 
-        
         if player.y > -30 then 
             vy = player.speed * -1
         end 
-
         player.animations.current = player.animations.up
         player.animations.last = player.animations.up
 
@@ -107,13 +113,39 @@ function love.update(dt)
 
     player.collider:setLinearVelocity(vx, vy)
     player.animations.current:update(dt)
+    rac.current:update(dt)
 
     -- camera
+    cam_zoom = 3
     cam:lookAt(player.x, player.y)
-    cam:zoomTo(2)
+    cam:zoomTo(cam_zoom)
 
-    if cam.x < 0 then
-        cam:lockX(0)
+    -- This section prevents the camera from viewing outside the background
+    -- First, get width/height of the game window
+    local w = love.graphics.getWidth()
+    local h = love.graphics.getHeight()
+
+    -- Left border
+    if cam.x < w/(2*cam_zoom) then
+        cam.x = w/(2*cam_zoom)
+    end
+
+    -- Right border
+    if cam.y < h/(2*cam_zoom) then
+        cam.y = h/(2*cam_zoom)
+    end
+
+    -- Get width/height of background
+    local mapW = gameMap.width * gameMap.tilewidth
+    local mapH = gameMap.height * gameMap.tileheight
+
+    -- Right border
+    if cam.x > (mapW - w/(2*cam_zoom)) then
+        cam.x = (mapW - w/(2*cam_zoom))
+    end
+    -- Bottom border
+    if cam.y > (mapH - h/(2*cam_zoom)) then
+        cam.y = (mapH - h/(2*cam_zoom))
     end
 
     -- colliders
@@ -132,14 +164,18 @@ function love.draw()
         gameMap:drawLayer(gameMap.layers["Tile Layer 3"])
         gameMap:drawLayer(gameMap.layers["stairs-to-level-2"])
         gameMap:drawLayer(gameMap.layers["level-2"])
+        gameMap:drawLayer(gameMap.layers["deco-level-2"])
         player.animations.current:draw(player.spriteSheet, player.x, player.y, nil, 2)
         gameMap:drawLayer(gameMap.layers["nature"])
         love.graphics.circle("line", 0, 0, 1)
         love.graphics.circle("fill", 1600, 1600, 1)
 
-        world:draw()
+        rac.current:draw(rac.spriteSheet, rac.x, rac.y, nil, 2)
+
+        --world:draw()
     cam:detach()
 
     love.graphics.circle("fill", cam.x, cam.y, 1)
     love.graphics.print(player.x, 0, 0)
+    love.graphics.print(player.y, 0, 10)
 end
