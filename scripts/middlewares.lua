@@ -14,8 +14,9 @@ function setUpDependencies()
     world = wf.newWorld(0,0)
 end
 
+-- obj1 has to be the player
 function calculateDistance(obj1, obj2) 
-    return math.sqrt((obj1.x-obj2.x)^2 + (obj1.y-obj2.y)^2)
+    return math.sqrt(((obj1.x+35)-obj2.x)^2 + ((obj1.y+32)-obj2.y)^2)
 end
 
 function love.keypressed(key, scancode, isrepeat)

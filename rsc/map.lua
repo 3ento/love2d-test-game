@@ -9,8 +9,8 @@ return {
   height = 50,
   tilewidth = 32,
   tileheight = 32,
-  nextlayerid = 16,
-  nextobjectid = 77,
+  nextlayerid = 18,
+  nextobjectid = 78,
   properties = {},
   tilesets = {
     {
@@ -1880,6 +1880,35 @@ return {
           y = 144.909,
           width = 42.1818,
           height = 27.5455,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        }
+      }
+    },
+    {
+      type = "objectgroup",
+      draworder = "topdown",
+      id = 17,
+      name = "rune_obj",
+      class = "",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
+      properties = {},
+      objects = {
+        {
+          id = 77,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 750.875,
+          y = 716.875,
+          width = 17.0625,
+          height = 5.0625,
           rotation = 0,
           visible = true,
           properties = {}
