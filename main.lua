@@ -1,4 +1,6 @@
 function love.load() 
+    f3Menu = false
+
     -- smooth scaling
     love.graphics.setDefaultFilter("nearest", "nearest")
 
@@ -76,7 +78,6 @@ function love.load()
     end
 
     love.window.setMode(1920, 1080)
-    f3Menu = false
 end
 
 function love.update(dt)
@@ -162,18 +163,16 @@ function love.update(dt)
     world:update(dt)
     player.x = player.collider:getX() - 32
     player.y = player.collider:getY() - 35
-   
-
-    if love.keyboard.isDown("f3") then
-        f3Menu = true
-    end
 
     if calculateDistance(player.x, player.y, rac.x, rac.y) > 180 then
         textBox = false
     end
+
+    
 end
 
-function love.draw() 
+function love.draw()
+
     cam:attach()
         -- order of map rendering
         gameMap:drawLayer(gameMap.layers["ground"])
@@ -213,6 +212,7 @@ function love.draw()
 
     cam:detach()
 
+    
     if f3Menu then
         --love.graphics.print(math.floor(player.x), 0,0)
         --love.graphics.print(math.floor(player.y), 0,10)
@@ -229,4 +229,9 @@ function love.keypressed(key, scancode, isrepeat)
     if key == "e" and calculateDistance(player.x, player.y, rac.x, rac.y) < 180 then
        textBox = true
     end
+    if key == "f3" then
+        f3Menu = not f3Menu
+    end
  end
+
+
