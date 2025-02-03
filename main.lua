@@ -17,6 +17,12 @@ function love.load()
     wf = require 'lib/windfield'
     world = wf.newWorld(0,0)
 
+    -- dialog boxes
+    moan = require('lib/Moan')
+    Moan.speak("Title", {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur feugiat nisi quis mollis.\nQuisque sodales purus eget sem mollis tincidunt."})
+    Moan.setSpeed("fast")
+    moan.autoWrap = true
+
     --racoon
     rac = {}
     rac.x = 720
@@ -32,7 +38,7 @@ function love.load()
     player.y = 350
     player.spriteSheet = love.graphics.newImage('rsc/sprites/cat_sprite.png')
     player.grid = anim8.newGrid(32, 32, player.spriteSheet:getWidth(),  player.spriteSheet:getHeight())
-    player.collider = world:newBSGRectangleCollider(player.x, player.y, 16, 32, 4)
+    player.collider = world:newBSGRectangleCollider(player.x, player.y, 16, 32, 12)
     player.collider:setFixedRotation(true)
 
     -- animations
@@ -60,13 +66,22 @@ function love.load()
             table.insert(walls, wall)
         end
     end
+
+    if gameMap.layers["rock"] then
+        for i, obj in pairs(gameMap.layers["rock"].objects) do
+            local wall = world:newRectangleCollider(obj.x, obj.y, obj.width, obj.height)
+            wall:setType('static')
+            table.insert(walls, wall)
+        end
+    end
     
 
-    love.window.setFullscreen(true)
+    love.window.setMode(1920, 1080)
     f3Menu = false
 end
 
 function love.update(dt)
+    Moan.update(dt)
     --movement
     vx = 0
     vy = 0
@@ -160,27 +175,34 @@ function love.draw()
         -- order of map rendering
         gameMap:drawLayer(gameMap.layers["ground"])
         gameMap:drawLayer(gameMap.layers["behind-the-wall"])
-        gameMap:drawLayer(gameMap.layers["Tile Layer 4"])
+        gameMap:drawLayer(gameMap.layers["upper-wall"])
         gameMap:drawLayer(gameMap.layers["deco"])
-        gameMap:drawLayer(gameMap.layers["Tile Layer 3"])
-        gameMap:drawLayer(gameMap.layers["stairs-to-level-2"])
-        gameMap:drawLayer(gameMap.layers["level-2"])
-        gameMap:drawLayer(gameMap.layers["deco-level-2"])
+        gameMap:drawLayer(gameMap.layers["bottom-wall-back"])
         -- player render
         player.animations.current:draw(player.spriteSheet, player.x, player.y, nil, 2)
+        gameMap:drawLayer(gameMap.layers["bottom-wall-front"])
+        gameMap:drawLayer(gameMap.layers["stairs-to-level-2"])
+        gameMap:drawLayer(gameMap.layers["deco-level-2"])
         gameMap:drawLayer(gameMap.layers["nature"])
 
         -- render the racoon NPC
         rac.current:draw(rac.spriteSheet, rac.x, rac.y, nil, 2)
 
-        -- show hitboxes
-        --world:draw()
+        if f3Menu then
+            -- show hitboxes
+            world:draw()
+        end
 
     cam:detach()
+    Moan.draw(3)
 
     if f3Menu then
         love.graphics.print(math.floor(player.x), 0,0)
         love.graphics.print(math.floor(player.y), 0,10)
     end
 
+end
+
+function love.keyreleased(key)
+    Moan.keyreleased(key) -- or Moan.keypressed(key)
 end
