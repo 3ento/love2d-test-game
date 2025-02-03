@@ -74,7 +74,6 @@ function love.load()
             table.insert(walls, wall)
         end
     end
-    
 
     love.window.setMode(1920, 1080)
     f3Menu = false
@@ -168,6 +167,10 @@ function love.update(dt)
     if love.keyboard.isDown("f3") then
         f3Menu = true
     end
+
+    if calculateDistance(player.x, player.y, rac.x, rac.y) > 180 then
+        textBox = false
+    end
 end
 
 function love.draw() 
@@ -193,16 +196,37 @@ function love.draw()
             world:draw()
         end
 
+        if calculateDistance(player.x, player.y, rac.x, rac.y) < 180 then
+            love.graphics.rectangle("line", rac.x+22, rac.y-5, 20, 20, 6)
+            love.graphics.rectangle("fill", rac.x+2.5+22, rac.y+2.5-5, 15, 15, 6)
+            love.graphics.setColor(0, 0 ,0)
+            love.graphics.print("E", rac.x+2.5+22+3.5, rac.y+2.5-5)
+            love.graphics.reset()
+
+            love.keypressed(key, scancode, isrepeat)
+            
+        end
+
+        if textBox then
+            Moan.draw(3)
+        end
+
     cam:detach()
-    Moan.draw(3)
 
     if f3Menu then
-        love.graphics.print(math.floor(player.x), 0,0)
-        love.graphics.print(math.floor(player.y), 0,10)
+        --love.graphics.print(math.floor(player.x), 0,0)
+        --love.graphics.print(math.floor(player.y), 0,10)
+        love.graphics.print(calculateDistance(player.x, player.y, rac.x, rac.y))
     end
-
+    
 end
 
-function love.keyreleased(key)
-    Moan.keyreleased(key) -- or Moan.keypressed(key)
+function calculateDistance(x1, y1, x0, y0) 
+    return math.sqrt((x0-x1)^2 + (y0-y1)^2)
 end
+
+function love.keypressed(key, scancode, isrepeat)
+    if key == "e" and calculateDistance(player.x, player.y, rac.x, rac.y) < 180 then
+       textBox = true
+    end
+ end
