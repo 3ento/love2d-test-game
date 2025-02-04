@@ -16,7 +16,7 @@ function setUpColliders()
         for i, obj in pairs(gameMap.layers["rock"].objects) do
             local wall = world:newRectangleCollider(obj.x, obj.y, obj.width, obj.height)
             wall:setType('static')
-            table.insert(walls, wall)
+            walls["rock"] =  wall
         end
     end
 end

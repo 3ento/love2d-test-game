@@ -7,8 +7,8 @@ require 'scripts/dialogues'
 require 'scripts/mapRenderOrder'
 require 'scripts/runes'
 
+local moonshine = require 'lib/moonshine-master'
 function love.load() 
-
     setUpDependencies()
     racoonLoad()
     playerLoad()
@@ -16,7 +16,14 @@ function love.load()
     loadRunes()
     setUpDialogues()
 
-    end
+    effect = moonshine(moonshine.effects.desaturate).chain(moonshine.effects.vignette)
+    effect.desaturate.tint = {17, 17, 132}
+    effect.desaturate.strength = 0.7
+    effect.vignette.radius = 0.5
+
+    glow = moonshine(moonshine.effects.pixelate)
+
+end
 
 function love.update(dt)
     interactPrompt.animation:update(dt)
@@ -26,16 +33,21 @@ function love.update(dt)
     collidersUpdate(dt)
     distanceDependentEvents()
     updateDialogues(dt)
+    --winConditions()
 end
 
 function love.draw()
+    effect(function () 
     cam:attach()
         renderAll()
         if drawPrompt then
             drawInteractPrompt(interactTarget, 23, -4)
         end
         f3MenuCam()
+        
     cam:detach()
+    end)
+
     f3MenuFixed()
     drawDialogues()
 end
@@ -44,7 +56,6 @@ function love.keypressed(key)
     if key == "e" then
         interactionModules()
     end
-
     -- advance text boxes
     for i, obj in pairs(allDialogue) do
         if obj then

@@ -21,6 +21,30 @@ function setUpDependencies()
 
     drawPrompt = false
     interactTarget = nil
+
+    ones = love.graphics.newImage("rsc/sprites/Ones.png")
+    five = love.graphics.newImage("rsc/sprites/five.png")
+    zero = love.graphics.newImage("rsc/sprites/zero.png")
+    two = love.graphics.newImage("rsc/sprites/two.png")
+    three = love.graphics.newImage("rsc/sprites/three.png")
+
+    textBox = {}
+    textBox.sprite = love.graphics.newImage("rsc/sprites/textBox.png")
+    if gameMap.layers["textBox"] then
+        for i, obj in pairs(gameMap.layers["textBox"].objects) do
+            textBox.x = obj.x
+            textBox.y = obj.y
+        end
+    end
+
+    spawnOnes = false
+    spawnTwo = false
+    spawnThree = false
+    spawnZero = false
+    spawnFive = false
+    completion = 0
+
+ 
 end
 
 -- obj1 has to be the player
@@ -57,6 +81,7 @@ function drawInteractPrompt(object)
         x_offset = 23
         y_offset = -4
     end
+
     interactPrompt.animation:draw(interactPrompt.spriteSheet, object.x+(x_offset), object.y+(y_offset))
 end
 
