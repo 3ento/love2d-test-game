@@ -1,0 +1,1 @@
+MysteryRune: The sands of time fell powerless to that which was fated.

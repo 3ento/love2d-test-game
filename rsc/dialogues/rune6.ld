@@ -1,0 +1,1 @@
+MysteryRune: Memories hold power, but the time is to be quantified.

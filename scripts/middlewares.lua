@@ -12,20 +12,20 @@ function setUpDependencies()
     -- colliders
     wf = require 'lib/windfield'
     world = wf.newWorld(0,0)
+    
+    -- Interact prompt animation
+    interactPrompt = {}
+    interactPrompt.spriteSheet = love.graphics.newImage("rsc/sprites/e_prompt_sheet.png")
+    interactPrompt.grid = anim8.newGrid(18, 18, 36, 18)
+    interactPrompt.animation = anim8.newAnimation(interactPrompt.grid('1-2', 1), 0.5)
+
+    drawPrompt = false
+    interactTarget = nil
 end
 
 -- obj1 has to be the player
 function calculateDistance(obj1, obj2) 
     return math.sqrt(((obj1.x+35)-obj2.x)^2 + ((obj1.y+32)-obj2.y)^2)
-end
-
-function love.keypressed(key, scancode, isrepeat)
-    if key == "e" and calculateDistance(player, rac) < 180 then
-       textBox = true
-    end
-    if key == "f3" then
-        f3Menu = not f3Menu
-    end
 end
 
 function f3MenuCam() 
@@ -49,3 +49,32 @@ end
 f3Menu = false
 
 love.window.setMode(1920, 1080)
+
+function drawInteractPrompt(object)
+    x_offset = 0
+    y_offset = 0
+    if object == rac then
+        x_offset = 23
+        y_offset = -4
+    end
+    interactPrompt.animation:draw(interactPrompt.spriteSheet, object.x+(x_offset), object.y+(y_offset))
+end
+
+function distanceDependentEvents()
+
+    for i, obj in pairs(runes) do
+        if calculateDistance(player, obj) < 70 then
+            --mySecondDialogue:update(dt)
+            interactTarget = obj
+            drawPrompt = true
+        end
+    end
+
+    if calculateDistance(player, rac) < 200 then
+        --myDialogue:update(dt)
+        interactTarget = rac
+        drawPrompt = true
+    end
+       
+
+end

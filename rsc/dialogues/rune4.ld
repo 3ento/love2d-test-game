@@ -1,0 +1,1 @@
+MysteryRune: Love is strength.
