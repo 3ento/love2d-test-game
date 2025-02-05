@@ -6,6 +6,7 @@ require 'scripts/colliders'
 require 'scripts/dialogues'
 require 'scripts/mapRenderOrder'
 require 'scripts/runes'
+require 'scripts/gameplay'
 
 local moonshine = require 'lib/moonshine-master'
 function love.load() 
@@ -16,12 +17,12 @@ function love.load()
     loadRunes()
     setUpDialogues()
 
-    --[[effect = moonshine(moonshine.effects.desaturate).chain(moonshine.effects.vignette)
+    effect = moonshine(moonshine.effects.desaturate).chain(moonshine.effects.vignette)
     effect.desaturate.tint = {17, 17, 132}
     effect.desaturate.strength = 0.7
     effect.vignette.radius = 0.5
 
-    glow = moonshine(moonshine.effects.pixelate)]]
+    glow = moonshine(moonshine.effects.pixelate)
 
 end
 
@@ -33,11 +34,15 @@ function love.update(dt)
     collidersUpdate(dt)
     distanceDependentEvents()
     updateDialogues(dt)
-    --winConditions()
+    winConditions()
+
+    if win_con then 
+        effect = moonshine(moonshine.effects.glow)
+    end
 end
 
 function love.draw()
-    --effect(function () 
+    effect(function () 
     cam:attach()
         renderAll()
         if drawPrompt then
@@ -46,12 +51,13 @@ function love.draw()
         if showTextBox then
             love.graphics.draw(textBox.sprite, textBox.x, textBox.y)
         end
+        textBoxDraw()
         f3MenuCam()
     cam:detach()
     if printDebug then 
         love.graphics.print("kur", 0, 0)
     end
-    --end)
+    end)
     f3MenuFixed()
     drawDialogues()
 end
@@ -63,7 +69,7 @@ function love.keypressed(key)
 
     if key == "q" and showRockPrompt then 
         --love.graphics.draw(textBox.sprite, textBox.x, textBox.y)
-        showTextBox = true
+        showTextBox = not showTextBox
     end
     -- advance text boxes
     for i, obj in pairs(allDialogue) do

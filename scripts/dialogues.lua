@@ -8,8 +8,9 @@ function setUpDialogues()
     runeMssg4 = LoveDialogue.play("rsc/dialogues/rune4.ld")
     runeMssg5 = LoveDialogue.play("rsc/dialogues/rune5.ld")
     runeMssg6 = LoveDialogue.play("rsc/dialogues/rune6.ld")
+    FinaleDialogue = LoveDialogue.play("rsc/dialogues/rac_final.ld")
 
-    allDialogue = {myDialogue, runeMssg1, runeMssg2, runeMssg3, runeMssg4, runeMssg5, runeMssg6}
+    allDialogue = {myDialogue, runeMssg1, runeMssg2, runeMssg3, runeMssg4, runeMssg5, runeMssg6, FinaleDialogue}
 end
 
 function updateDialogues(dt) 
@@ -44,6 +45,9 @@ function drawDialogues()
     end
     if showRune6 then 
         runeMssg6:draw()
+    end
+    if win_con then
+        FinaleDialogue:draw()
     end
 end
 

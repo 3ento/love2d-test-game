@@ -24,7 +24,7 @@ function winConditions()
 end
 
 function textBoxDraw() 
-    love.graphics.draw(textBox.sprite, textBox.x, textBox.y)
+    --love.graphics.draw(textBox.sprite, textBox.x, textBox.y)
     if spawnOnes then
         love.graphics.draw(ones, textBox.x, textBox.y)
         completion = completion + 1
@@ -47,7 +47,7 @@ function textBoxDraw()
     end
 end
 
-function Win() {
+function Win()
     gameMap:drawLayer(gameMap.layers["ground"])
         gameMap:drawLayer(gameMap.layers["behind-the-wall"])
         gameMap:drawLayer(gameMap.layers["upper-wall"])
@@ -65,4 +65,4 @@ function Win() {
         gameMap:drawLayer(gameMap.layers["bottom-wall-front"])
         gameMap:drawLayer(gameMap.layers["stairs-to-level-2"])
         gameMap:drawLayer(gameMap.layers["nature"])
-}
+end

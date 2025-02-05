@@ -48,6 +48,8 @@ function setUpDependencies()
     spawnZero = false
     spawnFive = false
     completion = 0
+
+    showTextBox = false
 end
 
 -- obj1 has to be the player
