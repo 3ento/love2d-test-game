@@ -16,12 +16,12 @@ function love.load()
     loadRunes()
     setUpDialogues()
 
-    effect = moonshine(moonshine.effects.desaturate).chain(moonshine.effects.vignette)
+    --[[effect = moonshine(moonshine.effects.desaturate).chain(moonshine.effects.vignette)
     effect.desaturate.tint = {17, 17, 132}
     effect.desaturate.strength = 0.7
     effect.vignette.radius = 0.5
 
-    glow = moonshine(moonshine.effects.pixelate)
+    glow = moonshine(moonshine.effects.pixelate)]]
 
 end
 
@@ -37,17 +37,21 @@ function love.update(dt)
 end
 
 function love.draw()
-    effect(function () 
+    --effect(function () 
     cam:attach()
         renderAll()
         if drawPrompt then
             drawInteractPrompt(interactTarget, 23, -4)
         end
+        if showTextBox then
+            love.graphics.draw(textBox.sprite, textBox.x, textBox.y)
+        end
         f3MenuCam()
-        
     cam:detach()
-    end)
-
+    if printDebug then 
+        love.graphics.print("kur", 0, 0)
+    end
+    --end)
     f3MenuFixed()
     drawDialogues()
 end
@@ -55,6 +59,11 @@ end
 function love.keypressed(key)
     if key == "e" then
         interactionModules()
+    end
+
+    if key == "q" and showRockPrompt then 
+        --love.graphics.draw(textBox.sprite, textBox.x, textBox.y)
+        showTextBox = true
     end
     -- advance text boxes
     for i, obj in pairs(allDialogue) do

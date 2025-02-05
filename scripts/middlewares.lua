@@ -19,6 +19,11 @@ function setUpDependencies()
     interactPrompt.grid = anim8.newGrid(18, 18, 36, 18)
     interactPrompt.animation = anim8.newAnimation(interactPrompt.grid('1-2', 1), 0.5)
 
+    interactPromptForRock = {}
+    interactPromptForRock.spriteSheet = love.graphics.newImage("rsc/sprites/q_prompt_sheet.png")
+    interactPromptForRock.grid = anim8.newGrid(18, 18, 36, 18)
+    interactPromptForRock.animation = anim8.newAnimation(interactPrompt.grid('1-2', 1), 0.5)
+
     drawPrompt = false
     interactTarget = nil
 
@@ -43,8 +48,6 @@ function setUpDependencies()
     spawnZero = false
     spawnFive = false
     completion = 0
-
- 
 end
 
 -- obj1 has to be the player
@@ -72,7 +75,8 @@ end
 
 f3Menu = false
 
-love.window.setMode(1920, 1080)
+--love.window.setMode(1920, 1080)
+love.window.setFullscreen(true)
 
 function drawInteractPrompt(object)
     x_offset = 0
@@ -82,6 +86,10 @@ function drawInteractPrompt(object)
         y_offset = -4
     end
 
+    if showRockPrompt then 
+        interactPromptForRock.animation:draw(interactPromptForRock.spriteSheet, rockObj.x, rockObj.y)
+    end
+
     interactPrompt.animation:draw(interactPrompt.spriteSheet, object.x+(x_offset), object.y+(y_offset))
 end
 
@@ -89,14 +97,16 @@ function distanceDependentEvents()
 
     for i, obj in pairs(runes) do
         if calculateDistance(player, obj) < 70 then
-            --mySecondDialogue:update(dt)
+            if obj.idx == "rock" then 
+                showRockPrompt = true
+                rockObj = obj
+            end
             interactTarget = obj
             drawPrompt = true
         end
     end
 
     if calculateDistance(player, rac) < 200 then
-        --myDialogue:update(dt)
         interactTarget = rac
         drawPrompt = true
     end
