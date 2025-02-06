@@ -1,6 +1,10 @@
 require 'scripts/middlewares' 
+require 'scripts/shaders'
 
 win_con = false
+paperSFX = love.audio.newSource("rsc/sounds/paperAppear.mp3", "static")
+paperSFXR = love.audio.newSource("rsc/sounds/papperAppearReverse3.mp3", "static")
+endingBGM = love.audio.newSource("rsc/sounds/ending.mp3", "static")
 spawnChecks = {
     ["1"] = false, 
     ["2"] = false, 
@@ -22,26 +26,17 @@ function winConditions()
             win_con = true
         end
     end
-    --[[if love.keyboard.isDown("1") then 
-        spawnOnes = true
+    
+    if win_con then 
+        sounds.bgMusic:pause()
+        endingBGM:play()
+        effect = moonshine(moonshine.effects.glow)
+        showTextBox = false
+        for i, obj in pairs(spawnChecks) do
+            obj = false
+        end
     end
-    if love.keyboard.isDown("2") then 
-        spawnTwo = true
-    end
-    if love.keyboard.isDown("3") then 
-        spawnThree = true
-    end
-    if love.keyboard.isDown("5") then 
-        spawnFive = true
-    end
-    if love.keyboard.isDown("0") then 
-        spawnZero = true
-    end]]
 
-    --[[if spawnFive and spawnOnes and spawnThree and spawnTwo and spawnTwo and spawnZero then
-        win_con = true
-        walls["rock"]:setType('dynamic')
-    end]]
 end
 
 function textBoxDraw() 

@@ -11,6 +11,9 @@ runeMessages = {
 }
 
 function setUpDialogues() 
+    sounds.runeSFX = love.audio.newSource("rsc/sounds/0207.mp3", "static")
+    typingSFX = love.audio.newSource("rsc/sounds/coinSFX.mp3", "static")
+
     myDialogue = LoveDialogue.play("rsc/dialogues/rac.ld")
     runeMssg1 = LoveDialogue.play("rsc/dialogues/rune1.ld")
     runeMssg2 = LoveDialogue.play("rsc/dialogues/rune2.ld")
@@ -68,6 +71,7 @@ function interactionModules()
             rac.dialogue1.isActive = not rac.dialogue1.isActive
         end
         racTextBox = true
+        typingSFX:play()
     end
 
     for i, obj in pairs(runes) do
@@ -75,6 +79,8 @@ function interactionModules()
             if obj.idx == "1" then
                 if showRune1 then
                     runeMssg1.isActive = not runeMssg1.isActive
+                else
+                    sounds.runeSFX:play()
                 end
                 showRune1 = true
             end
@@ -82,6 +88,8 @@ function interactionModules()
             if obj.idx == "2" then
                 if showRune2 then 
                     runeMssg2.isActive = not runeMssg2.isActive
+                else
+                    sounds.runeSFX:play()
                 end
                 showRune2 = true
             end
@@ -89,6 +97,8 @@ function interactionModules()
             if obj.idx == "3" then
                 if showRune3 then 
                     runeMssg3.isActive = not runeMssg3.isActive
+                else
+                    sounds.runeSFX:play()
                 end
                 showRune3 = true
             end
@@ -96,6 +106,8 @@ function interactionModules()
             if obj.idx == "4" then
                 if showRune4 then 
                     runeMssg4.isActive = not runeMssg4.isActive
+                else
+                    sounds.runeSFX:play()
                 end
                 showRune4 = true
             end
@@ -103,6 +115,8 @@ function interactionModules()
             if obj.idx == "5" then
                 if showRune5 then 
                     runeMssg5.isActive = not runeMssg5.isActive
+                else
+                    sounds.runeSFX:play()
                 end
                 showRune5 = true
             end
@@ -110,6 +124,8 @@ function interactionModules()
             if obj.idx == "6" then
                 if showRune6 then 
                     runeMssg6.isActive = not runeMssg6.isActive
+                else
+                    sounds.runeSFX:play()
                 end
                 showRune6 = true
             end

@@ -7,23 +7,21 @@ require 'scripts/dialogues'
 require 'scripts/mapRenderOrder'
 require 'scripts/runes'
 require 'scripts/gameplay'
+require 'scripts/shaders'
 
-local moonshine = require 'lib/moonshine-master'
 function love.load()
+    sounds = {}
+    sounds.bgMusic = love.audio.newSource("rsc/sounds/background_music.wav", "stream")
+    love.audio.setVolume(0.3)
+    sounds.bgMusic:play()
+
     setUpDependencies()
     racoonLoad()
     playerLoad()
     setUpColliders()
     loadRunes()
     setUpDialogues()
-
-    effect = moonshine(moonshine.effects.desaturate).chain(moonshine.effects.vignette)
-    effect.desaturate.tint = {17, 17, 132}
-    effect.desaturate.strength = 0.7
-    effect.vignette.radius = 0.5
-
-    glow = moonshine(moonshine.effects.pixelate)
-    glow.min_luma = 0.3
+    setUpShaders()
 end
 
 function love.update(dt)
@@ -32,20 +30,9 @@ function love.update(dt)
     camUpdate()
     camPreventOutOfBounds()
     collidersUpdate(dt)
-
     distanceDependentEvents(dt)
-
     updateDialogues(dt)
     winConditions()
-
-    if win_con then 
-        effect = moonshine(moonshine.effects.glow)
-        showTextBox = false
-        for i, obj in pairs(spawnChecks) do
-            obj = false
-        end
-    end
-
 end
 
 function love.draw()
@@ -65,10 +52,6 @@ function love.draw()
         f3MenuCam()
     cam:detach()
     end)
-
-
-    love.graphics.print(myDialogue.currentLine,0,0)
-
     f3MenuFixed()
     drawDialogues()
 end
@@ -79,16 +62,26 @@ function love.keypressed(key)
     end
 
     if key == "q" and showRockPrompt then 
+        if showTextBox then
+            paperSFXR:play()
+        else
+            paperSFX:play()
+        end
         showTextBox = not showTextBox
     end
 
     -- advance text boxes
-    for i, obj in pairs(allDialogue) do
-        if myDialogue.currentLine == 7 and not win_con then
-            racTextBox = false
-        else
-            if obj then
-                obj:keypressed(key)
+    if key == "space" then
+        for i, obj in pairs(allDialogue) do
+            if myDialogue.currentLine == 7 and not win_con then
+                racTextBox = false
+            else
+                if obj then
+                    if obj == myDialogue then
+                        typingSFX:play()
+                    end
+                    obj:keypressed(key)
+                end
             end
         end
     end

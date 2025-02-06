@@ -31,6 +31,9 @@ function playerLoad()
     player.animations.up = anim8.newAnimation( player.grid('1-4', 12), 0.2)
     player.animations.left = anim8.newAnimation( player.grid('1-4', 8), 0.2)
     player.animations.right = anim8.newAnimation( player.grid('1-4', 10), 0.2)
+
+    sounds.walking = love.audio.newSource("rsc/sounds/0207(1).mp3", "static")
+    sounds.walking:setLooping(true)
 end
 
 
@@ -59,19 +62,21 @@ function playerUpdate(dt)
         vx = player.speed
         player.animations.current = player.animations.right
         player.animations.last = player.animations.right
-
+        sounds.walking:play()
     elseif love.keyboard.isDown('left') or love.keyboard.isDown("a") then 
         if player.x > -15 then 
             vx = player.speed * -1
         end
         player.animations.current = player.animations.left
         player.animations.last = player.animations.left
+        sounds.walking:play()
     end
 
     if love.keyboard.isDown('down') or love.keyboard.isDown("s") then 
         vy = player.speed
         player.animations.current = player.animations.down
         player.animations.last = player.animations.down
+        sounds.walking:play()
 
     elseif love.keyboard.isDown('up') or love.keyboard.isDown("w") then 
         if player.y > -30 then 
@@ -79,7 +84,11 @@ function playerUpdate(dt)
         end 
         player.animations.current = player.animations.up
         player.animations.last = player.animations.up
+        sounds.walking:play()
+    end
 
+    if vx == 0 and vy == 0 then
+        sounds.walking:pause()    
     end
 
     player.collider:setLinearVelocity(vx, vy)

@@ -96,7 +96,6 @@ function drawInteractPrompt(object)
 end
 
 function distanceDependentEvents(dt)
-
     for i, obj in pairs(runes) do
         if calculateDistance(player, obj) < 70 then
             if obj.idx == "rock" then 
@@ -115,7 +114,6 @@ function distanceDependentEvents(dt)
         interactTarget = rac
         drawPrompt = true
     end
-       
 
 end
 
