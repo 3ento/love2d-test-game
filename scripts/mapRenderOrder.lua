@@ -7,13 +7,13 @@ function renderAll()
     gameMap:drawLayer(gameMap.layers["bottom-wall-back"])
     gameMap:drawLayer(gameMap.layers["rock-tile"])
     gameMap:drawLayer(gameMap.layers["level-2-runes"])
+    gameMap:drawLayer(gameMap.layers["deco-level-2"])
 
+    racoonRender()
     playerRender()
 
     gameMap:drawLayer(gameMap.layers["bottom-wall-front"])
     gameMap:drawLayer(gameMap.layers["stairs-to-level-2"])
-    gameMap:drawLayer(gameMap.layers["deco-level-2"])
     gameMap:drawLayer(gameMap.layers["nature"])
 
-    racoonRender()
 end

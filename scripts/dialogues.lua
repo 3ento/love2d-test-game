@@ -1,4 +1,14 @@
 LoveDialogue = require "lib/Love-Dialogue-main/LoveDialogue"
+racTextBox = false
+
+runeMessages = {
+    ["1"] = runeMssg1,
+    ["2"] = runeMssg2,
+    ["3"] = runeMssg3,
+    ["4"] = runeMssg4,
+    ["5"] = runeMssg5,
+    ["6"] = runeMssg6
+}
 
 function setUpDialogues() 
     myDialogue = LoveDialogue.play("rsc/dialogues/rac.ld")
@@ -11,6 +21,7 @@ function setUpDialogues()
     FinaleDialogue = LoveDialogue.play("rsc/dialogues/rac_final.ld")
 
     allDialogue = {myDialogue, runeMssg1, runeMssg2, runeMssg3, runeMssg4, runeMssg5, runeMssg6, FinaleDialogue}
+
 end
 
 function updateDialogues(dt) 
@@ -47,14 +58,14 @@ function drawDialogues()
         runeMssg6:draw()
     end
     if win_con then
-        FinaleDialogue:draw()
+        myDialogue:draw()
     end
 end
 
 function interactionModules() 
-    if calculateDistance(player, rac) < 180 then
+    if calculateDistance(player, rac) < 230 then
         if racTextBox then 
-            myDialogue.isActive = not myDialogue.isActive
+            rac.dialogue1.isActive = not rac.dialogue1.isActive
         end
         racTextBox = true
     end

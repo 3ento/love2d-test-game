@@ -9,7 +9,7 @@ require 'scripts/runes'
 require 'scripts/gameplay'
 
 local moonshine = require 'lib/moonshine-master'
-function love.load() 
+function love.load()
     setUpDependencies()
     racoonLoad()
     playerLoad()
@@ -23,7 +23,7 @@ function love.load()
     effect.vignette.radius = 0.5
 
     glow = moonshine(moonshine.effects.pixelate)
-
+    glow.min_luma = 0.3
 end
 
 function love.update(dt)
@@ -32,13 +32,20 @@ function love.update(dt)
     camUpdate()
     camPreventOutOfBounds()
     collidersUpdate(dt)
-    distanceDependentEvents()
+
+    distanceDependentEvents(dt)
+
     updateDialogues(dt)
     winConditions()
 
     if win_con then 
         effect = moonshine(moonshine.effects.glow)
+        showTextBox = false
+        for i, obj in pairs(spawnChecks) do
+            obj = false
+        end
     end
+
 end
 
 function love.draw()
@@ -51,13 +58,17 @@ function love.draw()
         if showTextBox then
             love.graphics.draw(textBox.sprite, textBox.x, textBox.y)
         end
+        if win_con then 
+            Win()
+        end
         textBoxDraw()
         f3MenuCam()
     cam:detach()
-    if printDebug then 
-        love.graphics.print("kur", 0, 0)
-    end
     end)
+
+
+    love.graphics.print(myDialogue.currentLine,0,0)
+
     f3MenuFixed()
     drawDialogues()
 end
@@ -68,13 +79,17 @@ function love.keypressed(key)
     end
 
     if key == "q" and showRockPrompt then 
-        --love.graphics.draw(textBox.sprite, textBox.x, textBox.y)
         showTextBox = not showTextBox
     end
+
     -- advance text boxes
     for i, obj in pairs(allDialogue) do
-        if obj then
-            obj:keypressed(key)
+        if myDialogue.currentLine == 7 and not win_con then
+            racTextBox = false
+        else
+            if obj then
+                obj:keypressed(key)
+            end
         end
     end
 

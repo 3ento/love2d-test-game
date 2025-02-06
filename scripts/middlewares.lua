@@ -95,7 +95,7 @@ function drawInteractPrompt(object)
     interactPrompt.animation:draw(interactPrompt.spriteSheet, object.x+(x_offset), object.y+(y_offset))
 end
 
-function distanceDependentEvents()
+function distanceDependentEvents(dt)
 
     for i, obj in pairs(runes) do
         if calculateDistance(player, obj) < 70 then
@@ -105,6 +105,9 @@ function distanceDependentEvents()
             end
             interactTarget = obj
             drawPrompt = true
+            break
+        else
+            drawPrompt = false
         end
     end
 
@@ -114,4 +117,12 @@ function distanceDependentEvents()
     end
        
 
+end
+
+function allTrue(t)
+    for _, v in pairs(t) do
+        if not v then return false end
+    end
+
+    return true
 end
