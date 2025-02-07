@@ -1,17 +1,40 @@
+require "scripts/dialogues"
+
+--animation
+anim8 = require 'lib/anim8'
+
+-- map
+sti = require 'lib/sti'
+gameMap = sti('rsc/map.lua')
+
+-- colliders
+wf = require 'lib/windfield'
+world = wf.newWorld(0,0)
+
+interactPromptForRock = {}
+interactPromptForRock.spriteSheet = love.graphics.newImage("rsc/sprites/q_prompt_sheet.png")
+interactPromptForRock.grid = anim8.newGrid(18, 18, 36, 18)
+interactPromptForRock.animation = anim8.newAnimation(interactPromptForRock.grid('1-2', 1), 0.5)
+
+runes = {}
+if gameMap.layers["rune_obj"] then
+    for i, obj in pairs(gameMap.layers["rune_obj"].objects) do
+        local rune = {}
+        rune.x = obj.x
+        rune.y = obj.y
+        rune.idx = obj.name
+        rune.mssg = runeMessages[rune.idx]
+        table.insert(runes, rune)
+    end
+end
+
 function setUpDependencies()
+    --camera
+    camera = require 'lib/camera'
+    cam = camera()
+
     -- smooth scaling
     love.graphics.setDefaultFilter("nearest", "nearest")
-
-    --animation
-    anim8 = require 'lib/anim8'
-
-    -- map
-    sti = require 'lib/sti'
-    gameMap = sti('rsc/map.lua')
-
-    -- colliders
-    wf = require 'lib/windfield'
-    world = wf.newWorld(0,0)
     
     -- Interact prompt animation
     interactPrompt = {}
@@ -19,19 +42,8 @@ function setUpDependencies()
     interactPrompt.grid = anim8.newGrid(18, 18, 36, 18)
     interactPrompt.animation = anim8.newAnimation(interactPrompt.grid('1-2', 1), 0.5)
 
-    interactPromptForRock = {}
-    interactPromptForRock.spriteSheet = love.graphics.newImage("rsc/sprites/q_prompt_sheet.png")
-    interactPromptForRock.grid = anim8.newGrid(18, 18, 36, 18)
-    interactPromptForRock.animation = anim8.newAnimation(interactPrompt.grid('1-2', 1), 0.5)
-
     drawPrompt = false
     interactTarget = nil
-
-    ones = love.graphics.newImage("rsc/sprites/Ones.png")
-    five = love.graphics.newImage("rsc/sprites/five.png")
-    zero = love.graphics.newImage("rsc/sprites/zero.png")
-    two = love.graphics.newImage("rsc/sprites/two.png")
-    three = love.graphics.newImage("rsc/sprites/three.png")
 
     textBox = {}
     textBox.sprite = love.graphics.newImage("rsc/sprites/textBox.png")
@@ -41,15 +53,6 @@ function setUpDependencies()
             textBox.y = obj.y
         end
     end
-
-    spawnOnes = false
-    spawnTwo = false
-    spawnThree = false
-    spawnZero = false
-    spawnFive = false
-    completion = 0
-
-    showTextBox = false
 end
 
 -- obj1 has to be the player
@@ -62,7 +65,6 @@ function f3MenuCam()
         -- show hitboxes
         world:draw()
         love.graphics.circle("fill", player.x, player.y, 5)
-
     end
 end
 
@@ -71,7 +73,6 @@ function f3MenuFixed()
         love.graphics.print(math.floor(player.x), 0,0)
         love.graphics.print(math.floor(player.y), 0,10)
         --love.graphics.print(calculateDistance(player.x, player.y, rac.x, rac.y))
-
     end
 end
 
@@ -119,7 +120,7 @@ end
 
 function allTrue(t)
     for _, v in pairs(t) do
-        if not v then return false end
+        if not v[1] then return false end
     end
 
     return true

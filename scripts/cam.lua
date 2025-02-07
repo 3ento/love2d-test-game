@@ -1,8 +1,11 @@
---camera
-camera = require 'lib/camera'
-cam = camera()
+require "scripts/middlewares"
 
-function camPreventOutOfBounds()
+function camUpdate() 
+    -- camera
+    cam_zoom = 3
+    cam:lookAt(player.x, player.y)
+    cam:zoomTo(cam_zoom)
+
     -- prevent camera from going out of bounds
     local w = love.graphics.getWidth()
     local h = love.graphics.getHeight()
@@ -24,11 +27,4 @@ function camPreventOutOfBounds()
     if cam.y > (mapH - h/(2*cam_zoom)) then
         cam.y = (mapH - h/(2*cam_zoom))
     end
-end
-
-function camUpdate() 
-    -- camera
-    cam_zoom = 3
-    cam:lookAt(player.x, player.y)
-    cam:zoomTo(cam_zoom)
 end

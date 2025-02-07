@@ -1,3 +1,5 @@
+require "scripts/middlewares"
+
 function renderAll() 
     gameMap:drawLayer(gameMap.layers["ground"])
     gameMap:drawLayer(gameMap.layers["behind-the-wall"])

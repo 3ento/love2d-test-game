@@ -1,23 +1,31 @@
-require 'scripts/middlewares' 
+require 'scripts/middlewares'
 require 'scripts/shaders'
+require 'scripts/colliders'
 
 win_con = false
 paperSFX = love.audio.newSource("rsc/sounds/paperAppear.mp3", "static")
 paperSFXR = love.audio.newSource("rsc/sounds/papperAppearReverse3.mp3", "static")
 endingBGM = love.audio.newSource("rsc/sounds/ending.mp3", "static")
+
+ones = love.graphics.newImage("rsc/sprites/Ones.png")
+five = love.graphics.newImage("rsc/sprites/five.png")
+zero = love.graphics.newImage("rsc/sprites/zero.png")
+two = love.graphics.newImage("rsc/sprites/two.png")
+three = love.graphics.newImage("rsc/sprites/three.png")
+
 spawnChecks = {
-    ["1"] = false, 
-    ["2"] = false, 
-    ["3"] = false, 
-    ["5"] = false, 
-    ["0"] = false
+    ["1"] = {false, ones}, 
+    ["2"] = {false, two}, 
+    ["3"] = {false, three}, 
+    ["5"] = {false, five}, 
+    ["0"] = {false, zero}
 }
 
 function winConditions() 
     if showTextBox then 
         for i, obj in pairs(spawnChecks) do 
             if love.keyboard.isDown(i) then
-                spawnChecks[i] = true
+                spawnChecks[i][1] = true
                 break
             end            
         end
@@ -28,12 +36,12 @@ function winConditions()
     end
     
     if win_con then 
-        sounds.bgMusic:pause()
+        bgMusic:pause()
         endingBGM:play()
         effect = moonshine(moonshine.effects.glow)
         showTextBox = false
         for i, obj in pairs(spawnChecks) do
-            obj = false
+            obj[1] = false
         end
     end
 
@@ -41,20 +49,11 @@ end
 
 function textBoxDraw() 
     if showTextBox then 
-        if spawnChecks["1"] then
-            love.graphics.draw(ones, textBox.x, textBox.y)
-        end
-        if spawnChecks["2"] then
-            love.graphics.draw(two, textBox.x, textBox.y)
-        end
-        if spawnChecks["3"] then
-            love.graphics.draw(three, textBox.x, textBox.y)
-        end
-        if spawnChecks["0"] then
-            love.graphics.draw(zero, textBox.x, textBox.y)
-        end
-        if spawnChecks["5"] then
-            love.graphics.draw(five, textBox.x, textBox.y)
+        for i, obj in pairs(spawnChecks) do
+            if spawnChecks[i][1] then
+                love.graphics.draw(spawnChecks[i][2], textBox.x, textBox.y)
+            end
+            break
         end
     end
 end

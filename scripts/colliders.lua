@@ -1,23 +1,21 @@
 require 'scripts/middlewares'
 
 setUpDependencies()
-function setUpColliders()
-    -- walls
-    walls = {}
-    if gameMap.layers["walls"] then
-        for i, obj in pairs(gameMap.layers["walls"].objects) do
-            local wall = world:newRectangleCollider(obj.x, obj.y, obj.width, obj.height)
-            wall:setType('static')
-            table.insert(walls, wall)
-        end
+-- walls
+walls = {}
+if gameMap.layers["walls"] then
+    for i, obj in pairs(gameMap.layers["walls"].objects) do
+        local wall = world:newRectangleCollider(obj.x, obj.y, obj.width, obj.height)
+        wall:setType('static')
+        table.insert(walls, wall)
     end
+end
 
-    if gameMap.layers["rock"] then
-        for i, obj in pairs(gameMap.layers["rock"].objects) do
-            local wall = world:newRectangleCollider(obj.x, obj.y, obj.width, obj.height)
-            wall:setType('static')
-            walls["rock"] =  wall
-        end
+if gameMap.layers["rock"] then
+    for i, obj in pairs(gameMap.layers["rock"].objects) do
+        local wall = world:newRectangleCollider(obj.x, obj.y, obj.width, obj.height)
+        wall:setType('static')
+        walls["rock"] =  wall
     end
 end
 

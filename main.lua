@@ -5,30 +5,34 @@ require 'scripts/cam'
 require 'scripts/colliders'
 require 'scripts/dialogues'
 require 'scripts/mapRenderOrder'
-require 'scripts/runes'
 require 'scripts/gameplay'
 require 'scripts/shaders'
 
+--[[
+    Animate the paper and numbers
+    Add sfx to the numbers
+    (?) Make dialog boxes disappear out of range
+    (?) Add some animated map assets
+    Start Screen
+    End Screen
+    ( :( ) Optimization ((srly why does it run so shit gd))
+]]
+
 function love.load()
-    sounds = {}
-    sounds.bgMusic = love.audio.newSource("rsc/sounds/background_music.wav", "stream")
+    bgMusic = love.audio.newSource("rsc/sounds/background_music.wav", "stream")
     love.audio.setVolume(0.3)
-    sounds.bgMusic:play()
+    bgMusic:play()
 
     setUpDependencies()
-    racoonLoad()
     playerLoad()
-    setUpColliders()
-    loadRunes()
-    setUpDialogues()
     setUpShaders()
 end
 
 function love.update(dt)
     interactPrompt.animation:update(dt)
+
     playerUpdate(dt)
     camUpdate()
-    camPreventOutOfBounds()
     collidersUpdate(dt)
     distanceDependentEvents(dt)
     updateDialogues(dt)
@@ -40,7 +44,7 @@ function love.draw()
     cam:attach()
         renderAll()
         if drawPrompt then
-            drawInteractPrompt(interactTarget, 23, -4)
+            drawInteractPrompt(interactTarget)
         end
         if showTextBox then
             love.graphics.draw(textBox.sprite, textBox.x, textBox.y)
@@ -54,6 +58,7 @@ function love.draw()
     end)
     f3MenuFixed()
     drawDialogues()
+    love.graphics.print(tostring(racTextBox), 0,0)
 end
 
 function love.keypressed(key)
@@ -91,4 +96,3 @@ function love.keypressed(key)
     end
 
 end
-
