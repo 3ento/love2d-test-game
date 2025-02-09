@@ -28,7 +28,7 @@ function playerLoad()
     player.animations.left = anim8.newAnimation( player.grid('1-4', 8), 0.2)
     player.animations.right = anim8.newAnimation( player.grid('1-4', 10), 0.2)
 
-    walking = love.audio.newSource("rsc/sounds/0207(1).mp3", "static")
+    walking = love.audio.newSource("rsc/sounds/walking.wav", "static")
     walking:setLooping(true)
 end
 

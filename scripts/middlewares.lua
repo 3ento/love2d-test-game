@@ -16,6 +16,10 @@ interactPromptForRock.spriteSheet = love.graphics.newImage("rsc/sprites/q_prompt
 interactPromptForRock.grid = anim8.newGrid(18, 18, 36, 18)
 interactPromptForRock.animation = anim8.newAnimation(interactPromptForRock.grid('1-2', 1), 0.5)
 
+bgMusic = love.audio.newSource("rsc/sounds/background_music.wav", "stream")
+love.audio.setVolume(0.3)
+bgMusic:play()
+
 runes = {}
 if gameMap.layers["rune_obj"] then
     for i, obj in pairs(gameMap.layers["rune_obj"].objects) do
@@ -41,18 +45,43 @@ function setUpDependencies()
     interactPrompt.spriteSheet = love.graphics.newImage("rsc/sprites/e_prompt_sheet.png")
     interactPrompt.grid = anim8.newGrid(18, 18, 36, 18)
     interactPrompt.animation = anim8.newAnimation(interactPrompt.grid('1-2', 1), 0.5)
+    
+    titleText = {}
+    titleText.spriteSheet = love.graphics.newImage("rsc/sprites/titleSheet.png")
+    titleText.grid = anim8.newGrid(2165, 1246, 4330, 1246)
+    titleText.animation = anim8.newAnimation(titleText.grid('1-2', 1), 0.9)
+
+    endingPhotos = {}
+    endingPhotos.spriteSheet = love.graphics.newImage("rsc/sprites/endingPhotosSheet2.png")
+    endingPhotos.grid = anim8.newGrid(2165, 1246, 4330, 1246)
+    endingPhotos.animation = anim8.newAnimation(endingPhotos.grid('1-2', 1), 0.9)
+
+    endingText = {}
+    endingText.spriteSheet = love.graphics.newImage("rsc/sprites/endingTextSheet.png")
+    endingText.grid = anim8.newGrid(2165, 1246, 4330, 1246)
+    endingText.animation = anim8.newAnimation(endingText.grid('1-2', 1), 0.9)
 
     drawPrompt = false
     interactTarget = nil
 
     textBox = {}
     textBox.sprite = love.graphics.newImage("rsc/sprites/textBox.png")
+
+    textBoxAnimated = {}
+    textBoxAnimated.spriteSheet = love.graphics.newImage("rsc/sprites/textBoxIdle.png")
+    textBoxAnimated.grid = anim8.newGrid(300, 52, 600, 52) 
+    textBoxAnimated.animation = anim8.newAnimation(textBoxAnimated.grid('1-2', 1), 0.5)
+
     if gameMap.layers["textBox"] then
         for i, obj in pairs(gameMap.layers["textBox"].objects) do
             textBox.x = obj.x
             textBox.y = obj.y
         end
     end
+
+    opacity = 0
+
+
 end
 
 -- obj1 has to be the player
@@ -71,7 +100,8 @@ end
 function f3MenuFixed() 
     if f3Menu then
         love.graphics.print(math.floor(player.x), 0,0)
-        love.graphics.print(math.floor(player.y), 0,10)
+        love.graphics.print(math.floor(player.y), 0,20)
+        love.graphics.print(tostring(textBoxAnimated.animation.position), 0,50)
         --love.graphics.print(calculateDistance(player.x, player.y, rac.x, rac.y))
     end
 end
@@ -124,4 +154,19 @@ function allTrue(t)
     end
 
     return true
+end
+
+function fadeIn(opcaity, dt)
+    -- fade in
+    if opacity < 1 then
+        opacity = opacity + 0.5*dt
+    end
+end
+
+
+function fadeOut(opcaity, dt)
+    -- fade in
+    if opacity ~= 0 then
+        opacity = opacity - 0.5*dt
+    end
 end

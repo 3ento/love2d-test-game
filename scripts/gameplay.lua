@@ -4,7 +4,7 @@ require 'scripts/colliders'
 
 win_con = false
 paperSFX = love.audio.newSource("rsc/sounds/paperAppear.mp3", "static")
-paperSFXR = love.audio.newSource("rsc/sounds/papperAppearReverse3.mp3", "static")
+paperSFXR = love.audio.newSource("rsc/sounds/papperAppearReverse.mp3", "static")
 endingBGM = love.audio.newSource("rsc/sounds/ending.mp3", "static")
 
 ones = love.graphics.newImage("rsc/sprites/Ones.png")
@@ -52,8 +52,8 @@ function textBoxDraw()
         for i, obj in pairs(spawnChecks) do
             if spawnChecks[i][1] then
                 love.graphics.draw(spawnChecks[i][2], textBox.x, textBox.y)
+                --break
             end
-            break
         end
     end
 end

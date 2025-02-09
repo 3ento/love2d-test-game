@@ -246,6 +246,10 @@ function Animation:gotoFrame(position)
   self.timer = self.intervals[self.position]
 end
 
+function Animation:getCurrentFramePosition()
+  return self.postition
+end
+
 function Animation:pauseAtEnd()
   self.position = #self.frames
   self.timer = self.totalDuration

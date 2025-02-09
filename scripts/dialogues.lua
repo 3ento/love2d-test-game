@@ -1,7 +1,7 @@
 LoveDialogue = require "lib/Love-Dialogue-main/LoveDialogue"
 racTextBox = false
 
-runeSFX = love.audio.newSource("rsc/sounds/0207.mp3", "static")
+runeSFX = love.audio.newSource("rsc/sounds/runeSFX.mp3", "static")
 typingSFX = love.audio.newSource("rsc/sounds/coinSFX.mp3", "static")
 
 myDialogue = LoveDialogue.play("rsc/dialogues/rac.ld")
@@ -31,7 +31,7 @@ end
 
 function drawDialogues() 
     for i, obj in pairs(runeMessages) do 
-        if obj[2] then
+        if runeMessages[i][2] then
             runeMessages[i][1]:draw()
         end
     end
@@ -44,8 +44,10 @@ end
 function interactionModules()
     -- Rac
     if calculateDistance(player, rac) < 230 then
+        if myDialogue.currentLine ~= 7 then
         racTextBox = not racTextBox
         typingSFX:play()
+        end
     else
     -- Runes
         for i, obj in pairs(runes) do
