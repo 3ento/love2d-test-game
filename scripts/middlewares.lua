@@ -20,6 +20,11 @@ bgMusic = love.audio.newSource("rsc/sounds/background_music.wav", "stream")
 love.audio.setVolume(0.3)
 bgMusic:play()
 
+f3Menu = false
+
+--love.window.setMode(1920, 1080)
+love.window.setFullscreen(true)
+
 runes = {}
 if gameMap.layers["rune_obj"] then
     for i, obj in pairs(gameMap.layers["rune_obj"].objects) do
@@ -52,7 +57,7 @@ function setUpDependencies()
     titleText.animation = anim8.newAnimation(titleText.grid('1-2', 1), 0.9)
 
     endingPhotos = {}
-    endingPhotos.spriteSheet = love.graphics.newImage("rsc/sprites/endingPhotosSheet2.png")
+    endingPhotos.spriteSheet = love.graphics.newImage("rsc/sprites/endingPhotosSheet.png")
     endingPhotos.grid = anim8.newGrid(2165, 1246, 4330, 1246)
     endingPhotos.animation = anim8.newAnimation(endingPhotos.grid('1-2', 1), 0.9)
 
@@ -80,8 +85,6 @@ function setUpDependencies()
     end
 
     opacity = 0
-
-
 end
 
 -- obj1 has to be the player
@@ -105,11 +108,6 @@ function f3MenuFixed()
         --love.graphics.print(calculateDistance(player.x, player.y, rac.x, rac.y))
     end
 end
-
-f3Menu = false
-
---love.window.setMode(1920, 1080)
-love.window.setFullscreen(true)
 
 function drawInteractPrompt(object)
     x_offset = 0
@@ -159,14 +157,13 @@ end
 function fadeIn(opcaity, dt)
     -- fade in
     if opacity < 1 then
-        opacity = opacity + 0.5*dt
+        opacity = opacity + 0.75*dt
     end
 end
-
 
 function fadeOut(opcaity, dt)
     -- fade in
     if opacity ~= 0 then
-        opacity = opacity - 0.5*dt
+        opacity = opacity - 0.75*dt
     end
 end

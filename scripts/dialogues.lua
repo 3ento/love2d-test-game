@@ -4,7 +4,7 @@ racTextBox = false
 runeSFX = love.audio.newSource("rsc/sounds/runeSFX.mp3", "static")
 typingSFX = love.audio.newSource("rsc/sounds/coinSFX.mp3", "static")
 
-myDialogue = LoveDialogue.play("rsc/dialogues/rac.ld")
+racDialogue = LoveDialogue.play("rsc/dialogues/rac.ld")
 runeMssg1 = LoveDialogue.play("rsc/dialogues/rune1.ld")
 runeMssg2 = LoveDialogue.play("rsc/dialogues/rune2.ld")
 runeMssg3 = LoveDialogue.play("rsc/dialogues/rune3.ld")
@@ -12,7 +12,7 @@ runeMssg4 = LoveDialogue.play("rsc/dialogues/rune4.ld")
 runeMssg5 = LoveDialogue.play("rsc/dialogues/rune5.ld")
 runeMssg6 = LoveDialogue.play("rsc/dialogues/rune6.ld")
 
-allDialogue = {myDialogue, runeMssg1, runeMssg2, runeMssg3, runeMssg4, runeMssg5, runeMssg6, FinaleDialogue}
+allDialogue = {racDialogue, runeMssg1, runeMssg2, runeMssg3, runeMssg4, runeMssg5, runeMssg6, FinaleDialogue}
 
 runeMessages = {
     ["1"] = {runeMssg1, false},
@@ -37,14 +37,14 @@ function drawDialogues()
     end
 
     if racTextBox or win_con then
-        myDialogue:draw()
+        racDialogue:draw()
     end
 end
 
 function interactionModules()
     -- Rac
     if calculateDistance(player, rac) < 230 then
-        if myDialogue.currentLine ~= 7 then
+        if racDialogue.currentLine ~= 7 then
         racTextBox = not racTextBox
         typingSFX:play()
         end
